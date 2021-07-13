@@ -1,0 +1,18 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data # Here you go!
+  web:
+    build: .
+    command: bundle exec rackup --port 1234 --host 0.0.0.0
+    volumes:
+      - .:/myapp
+    ports:
+      - "1234:1234"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://{user}:{password}@{hostname}:{port}/{database-name}
+      RACK_ENV: production
